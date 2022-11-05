@@ -1,0 +1,36 @@
+* {
+  /* global font */
+  font-family: Verdana;
+  font-size: 18px;
+}
+#root {
+  display: flex;
+  flex-direction: row;
+}
+#content {
+  display: flex;
+  display: block;
+  width: 800px;
+  height: 250px;
+  /* vertically centered text */
+  line-height: 250px;
+  border: 2px solid #555;
+  margin: 32px;
+  text-align: center;
+}
+.route {
+  cursor: pointer;
+  justify-content: center;
+  width: 150px;
+  height: 50px;
+  /* vertically centered text */
+  line-height: 50px;
+  position: relative;
+  border: 2px solid #555;
+  background: white;
+  text-align: center;
+  margin: 16px;
+}
+.route.selected {
+  background: yellow;
+}
