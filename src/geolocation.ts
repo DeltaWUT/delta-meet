@@ -23,28 +23,47 @@ class GeoLocator {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 this.position = position;
-                console.log('getPosition fired!');
+                this.status = GeoLocator.Status.SUCCESS;
+
+                var storedValue = {
+                    coords: {
+                        laititude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    },
+                    timestamp: position.timestamp
+                };
+
+                try {
+                    window.sessionStorage.setItem('location', JSON.stringify(storedValue));
+                } catch (e: any) {
+                    if (e instanceof DOMException && e.name === 'SecurityError') {
+                        console.error(`GeoLocator: ${e.message}`);
+                        this.status = GeoLocator.Status.SECURITY_VIOLATION;
+                    } else {
+                        this.status = GeoLocator.Status.UNKNOWN_ERROR;
+                    }
+                }
+
+                console.log(`getPosition fired! Exit status: ${this.status}`);
             },
             (error) => {
-                console.warn(`GeoLocator: error ${error.code}, ${error.message}`);
+                console.error(`GeoLocator: ${error.message}`);
                 this.status = GeoLocator.Status.UNKNOWN_ERROR;
-                return;
             },
             {
                 enableHighAccuracy: true,
                 timeout: 5000,
                 maximumAge: 60
             });
-
-        this.status = GeoLocator.Status.SUCCESS;
     }
 }
 
 namespace GeoLocator {
     export enum Status {
-        SUCCESS = 0,
-        NO_GPS,
-        UNINITIALIZED,
+        SUCCESS = 0,        // Geolocation succeeded
+        UNINITIALIZED,      // GeoLocator not used, ignore member fields
+        NO_GPS,             // Device does not support geolocation
+        SECURITY_VIOLATION, // Browser policy violation, local storage not allowed
         UNKNOWN_ERROR,
     }
 }
