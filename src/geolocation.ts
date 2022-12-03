@@ -27,7 +27,7 @@ class GeoLocator {
 
                 var storedValue = {
                     coords: {
-                        laititude: position.coords.latitude,
+                        latitude: position.coords.latitude,
                         longitude: position.coords.longitude
                     },
                     timestamp: position.timestamp
